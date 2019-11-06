@@ -13,7 +13,8 @@
         <module>guns-core</module>
         <module>guns-rest</module>
         <module>guns-gateway</module>
-
+        <module>guns-user</module>
+        <module>guns-api</module>
         <module>guns-generator</module>
     </modules>
 
