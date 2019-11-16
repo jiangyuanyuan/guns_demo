@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.stylefeng.guns</groupId>
-    <artifactId>guns-flims</artifactId>
+    <artifactId>guns-user</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
-    <name>guns-flims</name>
-    <description>guns flims服务</description>
+    <name>guns-user</name>
+    <description>guns user服务</description>
 
     <parent>
         <groupId>com.stylefeng</groupId>

@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2019-11-11
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/user/")
 public class UserController {
     @Autowired
     private UserAPI userAPI;
 
-
+    @RequestMapping("register")
     public RespenseVo register(UserModel userModel){
         if (userModel.getUsername()==null||userModel.getUsername().trim().length()==0){
             return RespenseVo.fail("用户名不能为空");
