@@ -9,8 +9,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>guns-api</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
+
 
     <name>guns-api</name>
     <url>http://maven.apache.org</url>

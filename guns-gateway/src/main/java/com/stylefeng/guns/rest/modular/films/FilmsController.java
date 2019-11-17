@@ -1,7 +1,7 @@
 package com.stylefeng.guns.rest.modular.films;
 
 
-import com.stylefeng.guns.rest.modular.films.vo.BannerVo;
+import com.stylefeng.guns.api.film.vo.BannerVo;
 import com.stylefeng.guns.rest.modular.vo.RespenseVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
