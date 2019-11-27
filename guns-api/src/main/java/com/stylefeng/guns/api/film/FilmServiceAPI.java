@@ -10,10 +10,13 @@ public interface FilmServiceAPI {
     List<BannerVo> getBanners();
 
     //获取正在热映电影
-    FilmVo getHotFilms(boolean isLimit ,int num);
+    FilmVo getHotFilms(boolean isLimit ,int page,int num,String sortId,String sourceId,String yearId,String catId);
 
     //获取即将上映的电影
-    FilmVo getSoonFilms(boolean isLimit ,int num);
+    FilmVo getSoonFilms(boolean isLimit ,int page,int num,String sortId,String sourceId,String yearId,String catId);
+
+    //获取经典影片
+    FilmVo getClassicFilms(boolean isLimit ,int page,int num,String sortId,String sourceId,String yearId,String catId);
 
     //获取票房排行
     List<FilmInfoVo> getBoxRanking();

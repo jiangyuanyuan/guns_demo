@@ -48,7 +48,7 @@ public class FilmsServiceImpl implements FilmServiceAPI {
     }
 
     @Override
-    public FilmVo getHotFilms(boolean isLimit, int num) {
+    public FilmVo getHotFilms(boolean isLimit,int nowpage,int num,String sortId,String sourceId,String yearId,String catId) {
         FilmVo filmVo = new FilmVo();
         List<FilmInfoVo> filmInfoVos = new ArrayList<>();
         EntityWrapper<MoocFilmT > entityWrapper = new EntityWrapper();
@@ -60,6 +60,19 @@ public class FilmsServiceImpl implements FilmServiceAPI {
             List<MoocFilmT> moocFilmTList = moocFilmTMapper.selectPage(page,entityWrapper);
             filmInfoVos = getFimlsInfo(moocFilmTList);
         }else {
+            Page<MoocFilmT> page =new Page<>(nowpage,num);
+            if (sourceId!="99"){
+                entityWrapper.eq("film_source",sourceId);
+            }
+            if (yearId!="99"){
+                entityWrapper.eq("film_data",yearId);
+            }
+            if (catId!="99"){
+                String catStr = "%#"+catId+"%#";
+                entityWrapper.like("film_cats",catStr);
+            }
+            List<MoocFilmT> moocFilmTList = moocFilmTMapper.selectPage(page,entityWrapper);
+            filmInfoVos = getFimlsInfo(moocFilmTList);
 
 
         }
@@ -85,7 +98,7 @@ public class FilmsServiceImpl implements FilmServiceAPI {
     }
 
     @Override
-    public FilmVo getSoonFilms(boolean isLimit, int num) {
+    public FilmVo getSoonFilms(boolean isLimit,int nowpage,int num,String sortId,String sourceId,String yearId,String catId) {
         FilmVo filmVo = new FilmVo();
         List<FilmInfoVo> filmInfoVos = new ArrayList<>();
         EntityWrapper<MoocFilmT > entityWrapper = new EntityWrapper();
@@ -97,13 +110,50 @@ public class FilmsServiceImpl implements FilmServiceAPI {
             List<MoocFilmT> moocFilmTList = moocFilmTMapper.selectPage(page,entityWrapper);
             filmInfoVos = getFimlsInfo(moocFilmTList);
         }else {
-
+            Page<MoocFilmT> page =new Page<>(nowpage,num);
+            if (sourceId!="99"){
+                entityWrapper.eq("film_source",sourceId);
+            }
+            if (yearId!="99"){
+                entityWrapper.eq("film_data",yearId);
+            }
+            if (catId!="99"){
+                String catStr = "%#"+catId+"%#";
+                entityWrapper.like("film_cats",catStr);
+            }
+            List<MoocFilmT> moocFilmTList = moocFilmTMapper.selectPage(page,entityWrapper);
+            filmInfoVos = getFimlsInfo(moocFilmTList);
 
         }
         filmVo.setFilmInfo(filmInfoVos);
 
 
         //列表
+        return filmVo;
+    }
+
+    @Override
+    public FilmVo getClassicFilms(boolean isLimit,int nowpage,int num,String sortId,String sourceId,String yearId,String catId) {
+        FilmVo filmVo = new FilmVo();
+        List<FilmInfoVo> filmInfoVos = new ArrayList<>();
+        EntityWrapper<MoocFilmT > entityWrapper = new EntityWrapper();
+        entityWrapper.eq("film_status","3");
+
+        Page<MoocFilmT> page =new Page<>(nowpage,num);
+        if (sourceId!="99"){
+            entityWrapper.eq("film_source",sourceId);
+        }
+        if (yearId!="99"){
+            entityWrapper.eq("film_data",yearId);
+        }
+        if (catId!="99"){
+            String catStr = "%#"+catId+"%#";
+            entityWrapper.like("film_cats",catStr);
+        }
+        List<MoocFilmT> moocFilmTList = moocFilmTMapper.selectPage(page,entityWrapper);
+        filmInfoVos = getFimlsInfo(moocFilmTList);
+        filmVo.setFilmInfo(filmInfoVos);
+
         return filmVo;
     }
 

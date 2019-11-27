@@ -19,17 +19,20 @@ public class SouceVo implements Serializable {
         this.sourceName = sourceName;
     }
 
-    public String getIsActive() {
-        return isActive;
-    }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
-    }
 
     public String sourceId;
     public String sourceName;
-    public String isActive;
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Boolean isActive;
 
 
 

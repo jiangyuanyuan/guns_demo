@@ -21,14 +21,17 @@ public class YearVo implements Serializable {
         this.yearName = yearName;
     }
 
-    public String getIsActive() {
+
+
+    public String yearName;
+
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
-    public String yearName;
-    public String isActive;
+    public Boolean isActive;
 }

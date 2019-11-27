@@ -22,13 +22,14 @@ public class CatInfoVo implements Serializable {
         this.catName = catName;
     }
 
-    public String getIsActive() {
+
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
-    public String isActive;
+    public Boolean isActive;
 }
