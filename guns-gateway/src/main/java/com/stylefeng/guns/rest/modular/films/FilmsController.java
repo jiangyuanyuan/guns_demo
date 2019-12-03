@@ -3,15 +3,13 @@ package com.stylefeng.guns.rest.modular.films;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.api.film.FilmServiceAPI;
-import com.stylefeng.guns.api.film.vo.BannerVo;
-import com.stylefeng.guns.api.film.vo.CatInfoVo;
-import com.stylefeng.guns.api.film.vo.SouceVo;
-import com.stylefeng.guns.api.film.vo.YearVo;
+import com.stylefeng.guns.api.film.vo.*;
 import com.stylefeng.guns.rest.modular.films.vo.ConditionVo;
 import com.stylefeng.guns.rest.modular.films.vo.FilmIndexVo;
 import com.stylefeng.guns.rest.modular.films.vo.FilmReqDto;
 import com.stylefeng.guns.rest.modular.vo.RespenseVo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -117,5 +115,35 @@ public class FilmsController {
 
         return null;
     }
+
+    //影片详情接口
+    @RequestMapping(value = "getFilms/{searchParam}",method = RequestMethod.GET)
+    public RespenseVo films(@PathVariable("searchParam") String param,int searchType){
+
+        //searchType   查询条件不同
+        FilmDetailVo filmDetailVo = filmServiceAPI.getFilmDetail(searchType,param);
+        String filmId = filmDetailVo.getFilmId();
+
+        FilmDescVo filmDesc = filmServiceAPI.getFilmDesc(filmId);
+
+        ActorVo dectInfo = filmServiceAPI.getDectInfo(filmId);
+
+        ImgVo imgs = filmServiceAPI.getImgs(filmId);
+
+        List<ActorVo> actors = filmServiceAPI.getActors(filmId);
+
+        InfoReqVo infoReqVo = new InfoReqVo();
+        ActorReqVo actorReqVo =new ActorReqVo();
+        actorReqVo.setActors(actors);
+        actorReqVo.setDirector(dectInfo);
+
+        infoReqVo.setActors(actorReqVo);
+        infoReqVo.setImgVo(imgs);
+        infoReqVo.setBiography(filmDesc.getBiography());
+        infoReqVo.setFilmId(filmId);
+        filmDetailVo.setInfo04(infoReqVo);
+        return RespenseVo.ok(filmDetailVo);
+    }
+
 
 }

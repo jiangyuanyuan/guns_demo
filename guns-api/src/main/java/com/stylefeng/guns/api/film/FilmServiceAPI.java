@@ -37,4 +37,18 @@ public interface FilmServiceAPI {
 
     //年代条件
     List<YearVo> getYear();
+
+
+    FilmDetailVo getFilmDetail(int searchType,String searchParam);
+
+
+    FilmDescVo getFilmDesc(String filmId);
+
+    ImgVo getImgs(String filmId);
+
+
+    ActorVo getDectInfo(String filmId);
+
+    List<ActorVo> getActors(String filmId);
+
 }
