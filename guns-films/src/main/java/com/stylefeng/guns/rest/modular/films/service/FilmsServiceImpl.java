@@ -246,7 +246,7 @@ public class FilmsServiceImpl implements FilmServiceAPI {
         FilmDetailVo filmDetailVo =null;
 
         if (seachType==1){
-            filmDetailVo = moocFilmTMapper.getFilmDetailByName(searchParam);
+            filmDetailVo = moocFilmTMapper.getFilmDetailByName("%"+searchParam+"%");
         }else {
             filmDetailVo = moocFilmTMapper.getFilmDetailById(searchParam);
         }

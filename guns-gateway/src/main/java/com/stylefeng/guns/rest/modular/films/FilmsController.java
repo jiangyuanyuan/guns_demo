@@ -2,6 +2,8 @@ package com.stylefeng.guns.rest.modular.films;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.rpc.RpcContext;
+import com.stylefeng.guns.api.film.FilmAsyncServiceAPI;
 import com.stylefeng.guns.api.film.FilmServiceAPI;
 import com.stylefeng.guns.api.film.vo.*;
 import com.stylefeng.guns.rest.modular.films.vo.ConditionVo;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Controller
 @RequestMapping("/films/")
@@ -22,7 +26,8 @@ public class FilmsController {
     @Reference(interfaceClass = FilmServiceAPI.class)
     FilmServiceAPI filmServiceAPI;
 
-
+    @Reference(interfaceClass = FilmAsyncServiceAPI.class,async = true)
+    FilmAsyncServiceAPI filmAsyncServiceAPI;
     @RequestMapping(value = "getIndex",method = RequestMethod.GET)
     public RespenseVo getIndex(){
         FilmIndexVo filmIndexVo =new FilmIndexVo();
@@ -118,28 +123,43 @@ public class FilmsController {
 
     //影片详情接口
     @RequestMapping(value = "getFilms/{searchParam}",method = RequestMethod.GET)
-    public RespenseVo films(@PathVariable("searchParam") String param,int searchType){
+    public RespenseVo films(@PathVariable("searchParam") String param,int searchType) throws Exception {
 
         //searchType   查询条件不同
         FilmDetailVo filmDetailVo = filmServiceAPI.getFilmDetail(searchType,param);
         String filmId = filmDetailVo.getFilmId();
 
-        FilmDescVo filmDesc = filmServiceAPI.getFilmDesc(filmId);
+        if (filmDetailVo ==null){
+            return RespenseVo.fail("没有详情");
+        }else if (filmDetailVo.getFilmId()==null||filmDetailVo.getFilmId().trim().length()==0){
+            return RespenseVo.fail("没有详情");
+        }
 
-        ActorVo dectInfo = filmServiceAPI.getDectInfo(filmId);
+//        FilmDescVo filmDesc = filmServiceAPI.getFilmDesc(filmId);
+        filmAsyncServiceAPI.getFilmDesc(filmId);
+        Future<FilmDescVo> futureFilmDesc = RpcContext.getContext().getFuture();
 
-        ImgVo imgs = filmServiceAPI.getImgs(filmId);
 
-        List<ActorVo> actors = filmServiceAPI.getActors(filmId);
+//        ActorVo dectInfo = filmServiceAPI.getDectInfo(filmId);
+        filmAsyncServiceAPI.getDectInfo(filmId);
+        Future<ActorVo> futureDectInfo = RpcContext.getContext().getFuture();
+
+//        ImgVo imgs = filmServiceAPI.getImgs(filmId);
+        filmServiceAPI.getImgs(filmId);
+        Future<ImgVo> futureImgs = RpcContext.getContext().getFuture();
+
+//        List<ActorVo> actors = filmServiceAPI.getActors(filmId);
+        filmServiceAPI.getActors(filmId);
+        Future<List<ActorVo>> futureActors = RpcContext.getContext().getFuture();
 
         InfoReqVo infoReqVo = new InfoReqVo();
         ActorReqVo actorReqVo =new ActorReqVo();
-        actorReqVo.setActors(actors);
-        actorReqVo.setDirector(dectInfo);
+        actorReqVo.setActors(futureActors.get());
+        actorReqVo.setDirector(futureDectInfo.get());
 
         infoReqVo.setActors(actorReqVo);
-        infoReqVo.setImgVo(imgs);
-        infoReqVo.setBiography(filmDesc.getBiography());
+        infoReqVo.setImgVo(futureImgs.get());
+        infoReqVo.setBiography(futureFilmDesc.get().getBiography());
         infoReqVo.setFilmId(filmId);
         filmDetailVo.setInfo04(infoReqVo);
         return RespenseVo.ok(filmDetailVo);
